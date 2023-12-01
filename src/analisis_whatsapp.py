@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 import re
 from collections import namedtuple, Counter, defaultdict
 import matplotlib.pyplot as plt
-from wordcloud import WordCloud
 import math
 from typing import List, Dict, NamedTuple, Optional, Tuple
 
@@ -56,29 +55,18 @@ def carga_log(fichero: str, os: str = SO, debug: bool = False) -> List[Mensaje]:
                 log.append(Mensaje(fecha,hora,usuario, texto))
             
     return log
-
+#ex 1
 def calcula_usuarios(log: List[Mensaje]) -> List[str]:
-    '''
-    Devuelve una lista ordenada con los usuarios que aparecen en el log, sin duplicados.
+    my_set=set()
+    for i in log:
+        my_set.add(i.usuario)
+    return list(my_set)
 
-    :param log: Lista de mensajes
-    :type log: List[Mensaje]
-    :return: Lista de usuarios
-    :rtype: List[str]
-    '''
-    pass
-
+#ex 2
 def cuenta_mensajes_por_usuario(log: List[Mensaje]) -> Dict[str, int]:
-    '''
-    Devuelve un diccionario en el que las claves son los usuarios y los valores son el número de mensajes de cada usuario.
-
-    :param log: Lista de mensajes
-    :type log: List[Mensaje]
-    :return: Diccionario de número de mensajes por usuario
-    :rtype: Dict[str, int]
-    '''
-    pass
-
+    return Counter(message.usuario for message in log)
+    
+#ex 3
 def muestra_numero_mensajes_por_usuario(log: List[Mensaje]) -> None:
     '''
     Muestra una gráfica de barras indicando el número de mensajes por cada usuario.
@@ -93,8 +81,10 @@ def muestra_numero_mensajes_por_usuario(log: List[Mensaje]) -> None:
     # respectivamente los usuarios que aparecen en log y el número de 
     # mensajes de cada uno de ellos. Se aconseja que la lista de usuarios
     # aparezca ordenada alfabéticamente
-    usuarios = None # TODO
-    num_mensajes = None # TODO
+    users_mg=cuenta_mensajes_por_usuario(log)
+    
+    usuarios = sorted(users_mg.keys()) # TODO
+    num_mensajes = [users_mg[u] for u in usuarios]
 
     plt.barh(usuarios, num_mensajes)
     plt.show()
