@@ -90,77 +90,44 @@ def muestra_numero_mensajes_por_usuario(log: List[Mensaje]) -> None:
     plt.show()
 
 def cuenta_mensajes_por_meses(log: List[Mensaje]) -> Dict[str, int]:
-    '''
-    Devuelve un diccionario en el que las claves son los meses a lo largo de los años 
-    (por ejemplo, "2/2016", "3/2016",...) y los valores son el número de mensajes de cada mes/año.
+    return Counter(message.fecha.strftime('%m/%Y') for message in log)
 
-    :param log: Lista de mensajes
-    :type log: List[Mensaje]
-    :return: Diccionario de número de mensajes por mes/año
-    :rtype: Dict[str, int]
-    '''
-    pass
-
+#EX 5
+# ---------------------------------------------------
 def cuenta_mensajes_por_dia_semana(log: List[Mensaje]) -> Dict[str, int]:
-    '''
-    Devuelve un diccionario en el que las claves son los días de la semana 
-    ("L", "M", "X", "J", "V", "S" y "D") y los valores son el número de mensajes de cada día.
-    Usa el método weekday() del tipo date para determinar el día de la semana.
-
-    :param log: Lista de mensajes
-    :type log: List[Mensaje]
-    :return: Diccionario de número de mensajes por día de la semana
-    :rtype: Dict[str, int]
-    '''
-    pass
+    weekdays_list=[]
+    weekDays = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
+    for m in log:
+        day_integer = datetime.weekday(m.fecha)
+        day_str= weekDays[day_integer]
+        weekdays_list.append(day_str)
+    d= dict(Counter(weekdays_list))
+    return d
 
 def cuenta_mensajes_por_momento_del_dia(log: List[Mensaje]) -> Dict[str, int]:
-    '''
-    Devuelve un diccionario en el que las claves son los momentos del día 
-    ("MAÑANA", "TARDE", "NOCHE") y los valores son el número de mensajes de cada momento.
-    Los momentos del día se definen como:
-    - "MAÑANA": de 7 a 13 horas
-    - "TARDE": de 14 a 20 horas
-    - "NOCHE": de 21 a 6 horas
-
-    :param log: Lista de mensajes
-    :type log: List[Mensaje]
-    :return: Diccionario de número de mensajes para cada momento del día
-    :rtype: Dict[str, int]
-    '''
-    pass
-   
+    return Counter("MAÑANA" if m.hora.hour >= 7 and m.hora.hour <= 13 else "TARDE" if m.hora.hour >= 14 and m.hora.hour <= 20 else "NOCHE" for m in log)
+  
+#EX 7
+# ---------------------------------------------------
 def calcula_media_horas_entre_mensajes(log: List[Mensaje]) -> float:
-    '''
-    Devuelve la media de horas entre mensajes consecutivos en el tiempo.
-
-    Para combinar una fecha y una hora en un solo objeto datetime, se utiliza la función datetime.combine.
-    Para calcular el número de horas entre dos objetos datetime d1 y d2, se utiliza la expresión: 
-    (d1-d2).total_seconds() / 3600
-
-    :param log: Lista de mensajes
-    :type log: List[Mensaje]
-    :return: Media de horas entre mensajes consecutivos
-    :rtype: float
-    '''
-    pass
+    hour_list = [(datetime.combine(log[i].fecha, log[i].hora) - datetime.combine(log[i-1].fecha, log[i-1].hora)).total_seconds() / 3600 for i in range(1, len(log))] 
+    return sum(hour_list) / len(hour_list)
    
+#EX 8
+# ---------------------------------------------------
 def genera_conteos_palabras_usuario_y_resto(log: List[Mensaje], usuario: str) -> Tuple[Dict[str, int], Dict[str, int]]:
-    '''
-    Genera dos diccionarios, uno con el conteo de las palabras usadas por el usuario,
-    y otro con el conteo de palabras usadas por el resto de usuarios.
+    user_counter = Counter()
+    others_counter = Counter()
+    
+    for message in log:
+        words = [word.strip(".,:();¿?¡!") for word in message.texto.split(" ")]
+        
+        if message.usuario == usuario:
+            user_counter.update(words)
+        else:
+            others_counter.update(words)
 
-    :param log: Lista de mensajes
-    :type log: List[Mensaje]
-    :param usuario: Usuario específico para el conteo de palabras
-    :type usuario: str
-    :return: Tupla conteniendo dos diccionarios, uno para el usuario y otro para el resto
-    :rtype: Tuple[Dict[str, int], Dict[str, int]]
-
-    Para dividir el texto en palabras, se usa split. Para cada palabra,
-    se utiliza la instrucción palabra.strip(".,:();¿?¡!") para eliminar signos de puntuación.
-    '''
-    pass
+    return (user_counter, others_counter)
 
 def genera_palabras_caracteristicas_usuario(log: List[Mensaje], usuario: str, umbral: int = 2) -> Dict[str, float]:
     '''

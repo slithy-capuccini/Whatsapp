@@ -51,7 +51,7 @@ def test_cuenta_mensajes_por_meses(mensajes: List[Mensaje]) -> None:
 def test_cuenta_mensajes_por_dia_semana(mensajes: List[Mensaje]) -> None:
     print("---> Test de cuenta_mensajes_por_dia_semana:")
     numero_mensajes_por_dias = cuenta_mensajes_por_dia_semana(mensajes)
-    for dia in ["L", "M", "X", "J", "V", "S", "D"]:
+    for dia in ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]:
         print(f"{dia}: {numero_mensajes_por_dias[dia]}")        
     print("="*40)
     print()
@@ -96,11 +96,11 @@ if __name__ == '__main__':
     mensajes = test_carga_log()
     test_calcula_usuarios(mensajes)
     test_cuenta_mensajes_por_usuario(mensajes)
-    #test_muestra_numero_mensajes_por_usuario(mensajes)
-    #test_cuenta_mensajes_por_meses(mensajes)
-    #test_cuenta_mensajes_por_dia_semana(mensajes)    
-    #test_cuenta_mensajes_por_momento_del_dia(mensajes)
-    #test_calcula_media_horas_entre_mensajes(mensajes)
-    #test_genera_conteos_palabras_usuario_y_resto(mensajes)
+    test_muestra_numero_mensajes_por_usuario(mensajes)
+    test_cuenta_mensajes_por_meses(mensajes)
+    test_cuenta_mensajes_por_dia_semana(mensajes)    
+    test_cuenta_mensajes_por_momento_del_dia(mensajes)
+    test_calcula_media_horas_entre_mensajes(mensajes)
+    test_genera_conteos_palabras_usuario_y_resto(mensajes)
     #test_genera_palabras_caracteristicas_usuario(mensajes)
     
